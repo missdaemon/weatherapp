@@ -1,0 +1,95 @@
+#: import ListAdapter kivy.adapters.listadapter.ListAdapter
+#:import FadeTransition kivy.uix.screenmanager.SlideTransition
+#: import main main
+	
+WeatherRoot:
+<WeatherRoot>:
+    AddLocationForm:
+	
+<AddLocationForm>:
+
+    id: location_form	
+    orientation: "vertical"
+    search_input: search_box
+    search_results: search_results_list
+    BoxLayout:
+		padding: 5
+        height: "60dp"
+        size_hint_y: None
+        TextInput:
+            id: search_box
+            size_hint_x: 50
+			font_size: 35
+            focus: True
+            multiline: False
+            on_text_validate: root.search_location()
+        Button:
+            text: "Search"
+			font_size: 35
+            size_hint_x: 50
+            on_press: location_form.search_location()
+			
+    ListView:
+        id: search_results_list
+        adapter:
+            ListAdapter(data=[],
+            cls = main.LocationButton,
+            args_converter=root.args_converter)
+        item_strings: []
+         
+    Button:
+        height: "60dp"
+		font_size: 35
+        size_hint_y: None
+        text: "Cancel"
+        on_press: app.root.show_current_weather(None)
+         
+<CurrentWeather>:	
+	conditions_box: conditions_box
+	orientation: "vertical"
+    BoxLayout:
+        Label:
+            text: "{} ({})".format(root.location[0], root.location[1])
+            font_size: "30dp"
+        Label:
+            text: "Current Temperature: {}".format(root.temp)
+            font_size: "30dp"
+    BoxLayout:
+        orientation: "horizontal"
+        Label:
+            text: "Lowest (C): {}".format(root.temp_min)
+			font_size: "20dp"
+        Label:
+            text: "Highest (C): {}".format(root.temp_max)
+			font_size: "20dp"
+		Label:
+			text:"Wind (km/h): {}".format(root.wind)
+			font_size: "20dp"
+	BoxLayout:
+		id: conditions_box 
+        orientation: "horizontal"
+        Label:
+            text: "{}".format(root.conditions_desc)	
+			font_size: "30dp"
+        AsyncImage:
+            source: root.conditions_image
+	BoxLayout:
+		padding: 10
+        orientation: "horizontal"
+        size_hint_y: None
+        height: "60dp"
+        Button:
+            text: "Find Another Location"
+			font_size: 25
+            on_press: app.root.show_add_location_form()
+        
+         
+<LocationButton>:
+    text: "{} ({})".format(self.location[0], self.location[1])
+    height: "40dp"
+    size_hint_y: None
+    on_press: app.root.show_current_weather(self.location)
+              
+<Conditions>:
+    Label:
+        text: root.desc
