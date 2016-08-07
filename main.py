@@ -1,6 +1,3 @@
-#Shelsy A. Chanis / 8-916-978
-#Mario Carter / 8-915-1458
-
 import json
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
